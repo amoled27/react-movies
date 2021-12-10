@@ -1,23 +1,22 @@
 const mongoose = require('mongoose');
 const app = require('./app');
-
-const config = require('./config/config');
-
-if (config.mongoose.username) {
-    mongoose.connect(config.mongoose.url, {
+require('dotenv').config();
+console.log(process.env, 'env')
+if (process.env.DB_USERNAME) {
+    mongoose.connect(process.env.MONGODB_URL, {
       auth: {
-        user: config.mongoose.username || '',
-        password: config.mongoose.password || '',
+        user: process.env.DB_USERNAME || '',
+        password: process.env.DB_PASSWORD || '',
       },
     });
   } else {
-    mongoose.connect(config.mongoose.uri);
+    mongoose.connect(process.env.MONGODB_URI);
   }
 
   mongoose.connection.on('open', () => {
     console.log('Connected to MongoDB');
-    server = app.listen(config.port, () => {
-      console.log(`Listening to port ${config.port}`);
+    server = app.listen(process.env.PORT, () => {
+      console.log(`Listening to port ${process.env.PORT}`);
     });
   });
 
